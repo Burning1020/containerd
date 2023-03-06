@@ -119,6 +119,10 @@ func (c *controllerLocal) Create(ctx context.Context, sandboxID string, opts ...
 		}
 	}
 
+	// Add sandbox metadata configs to ctx metadata
+	for k, v := range coptions.Metadata {
+		ctx = sandbox.WithCustomKeyValue(ctx, k, v)
+	}
 	if _, err := svc.CreateSandbox(ctx, &runtimeAPI.CreateSandboxRequest{
 		SandboxID:  sandboxID,
 		BundlePath: shim.Bundle(),

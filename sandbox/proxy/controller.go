@@ -43,6 +43,10 @@ func (s *remoteSandboxController) Create(ctx context.Context, sandboxID string, 
 	for _, opt := range opts {
 		opt(&options)
 	}
+	// Add sandbox metadata configs to ctx metadata
+	for k, v := range options.Metadata {
+		ctx = sandbox.WithCustomKeyValue(ctx, k, v)
+	}
 	_, err := s.client.Create(ctx, &api.ControllerCreateRequest{
 		SandboxID: sandboxID,
 		Rootfs:    options.Rootfs,
